@@ -1,9 +1,46 @@
-import React from 'react'
-import { FaShippingFast, FaHeart, FaShoppingCart } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react'
+import { FaShippingFast, FaHeart, FaShoppingCart, FaHome } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 
 
 const Main = () => {
+    const [ userData, setUserData ] = useState('');
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/get-data', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+            });
+      
+            if (!response.ok) {
+              throw new Error('Network response was not ok ' + response.statusText);
+            }
+      
+            const result = await response.json();
+            setUserData(result);
+            console.log('Success:', result);
+          } catch (error) {
+            console.error('Error:', error);
+          }
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, [])
+
+
+    console.log(userData)
+
+
+
+
+
+
     const Navbar = () => {
         return (
             <div className='w-screen bg-white flex justify-between px-10 py-6 fixed  z-50'>
@@ -45,9 +82,10 @@ const Main = () => {
                 </div>
 
                 <div className='flex gap-4'>
-                    <FaShippingFast size={40} className='text-slate-800 cursor-pointer' />
-                    <FaHeart size={40} className='text-slate-800 cursor-pointer' />
-                    <FaShoppingCart size={40} className='text-slate-800 cursor-pointer' />
+                    <Link to="/"><FaHome size={40} className='text-slate-800 cursor-pointer' /></Link>
+                    <Link to="/my-deliveries"><FaShippingFast size={40} className='text-slate-800 cursor-pointer' /></Link>
+                    <Link to="/liked"><FaHeart size={40} className='text-slate-800 cursor-pointer' /></Link>
+                    <Link to="/cart"><FaShoppingCart size={40} className='text-slate-800 cursor-pointer' /></Link>
                 </div>
 
             </div>
@@ -92,7 +130,54 @@ const Main = () => {
 
     const Footer = () => {
         return (
-            <div className='' >
+            <div className='relative top-[130px] text-white bg-gray-700 p-8' >
+                <div class="container mx-auto px-4">
+                    <div className='flex justify-between'>
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex space-x-4">
+                                <a href="https://play.google.com/" class="text-gray-400 hover:text-white" target="_blank">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="h-10" />
+                                </a>
+                            </div>
+                            <div class="flex space-x-4">
+                                <a href="#" class="text-gray-400 hover:text-white">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-white">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-white">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-white">
+                                    <i class="fab fa-pinterest-p"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-white">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-white">
+                                    <i class="fas fa-heart"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <img src="./images/allegroWhiteLogo.png" alt="Allegro logo" className='h-[40px] w-auto cursor-pointer' />
+                    </div>
+
+                    <div class="flex flex-col items-center">
+                        <p class="mb-4">Serwisy Grupy Allegro</p>
+                        <div class="flex space-x-6 text-gray-400 hover:text-white">
+                            <a href="#" class="hover:text-white">Allegro.cz</a>
+                            <a href="#" class="hover:text-white">Allegro.sk</a>
+                            <a href="#" class="hover:text-white">Mall.cz</a>
+                            <a href="#" class="hover:text-white">Mall.hu</a>
+                            <a href="#" class="hover:text-white">Mall.hr</a>
+                            <a href="#" class="hover:text-white">Mimovrste.com</a>
+                            <a href="#" class="hover:text-white">Wedo.cz</a>
+                            <a href="#" class="hover:text-white">Czc.cz</a>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         )
