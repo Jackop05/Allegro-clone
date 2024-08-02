@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -28,6 +31,7 @@ const Login = () => {
         throw new Error(errorData.message || 'Something went wrong');
       }
 
+      navigate('/');
       const result = await response.json();
       console.log('Success:', result);
     } catch (error) {

@@ -24,6 +24,10 @@ const cartItemSchema = new Schema({
       type: Number,
       required: true,
     },
+    image: {
+      type: String,
+      default: ''
+    }
   }, { _id: false });
 
 const userSchema = new Schema({

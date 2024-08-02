@@ -18,7 +18,7 @@ function App() {
       <Route path='/cart' element={<Cart />} />
       <Route path='/liked' element={<Liked />} />
       <Route path='/my-deliveries' element={<div>In progress...</div>} />
-      <Route path='/item/:id' element={<Item />} />
+      <Route path='/item/:itemId' element={<Item />} />
 
     </Routes>
   )
