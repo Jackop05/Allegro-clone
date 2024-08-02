@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { FaShippingFast, FaHeart, FaShoppingCart, FaHome } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 
 const Main = () => {
+    const navigate = useNavigate();
+
     const [ userData, setUserData ] = useState('');
+    const [ itemsData, setItemsData ] = useState([]);
 
     const fetchData = async () => {
         try {
@@ -18,6 +21,7 @@ const Main = () => {
             });
       
             if (!response.ok) {
+              navigate('/login');
               throw new Error('Network response was not ok ' + response.statusText);
             }
       
@@ -27,10 +31,31 @@ const Main = () => {
           } catch (error) {
             console.error('Error:', error);
           }
+
+          try {
+            const response = await fetch('http://localhost:5000/api/get-random-items-data', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+            });
+      
+            if (!response.ok) {
+              throw new Error('Network response was not ok ' + response.statusText);
+            }
+      
+            const result = await response.json();
+            setItemsData(result);
+            console.log('Success:', result);
+          } catch (error) {
+            console.error('Error:', error);
+          }
     }
 
     useEffect(() => {
         fetchData();
+        console.log(itemsData);
     }, [])
 
 
@@ -93,37 +118,38 @@ const Main = () => {
     }
 
     const Offers = () => {
+        let offersArray = [];
+        let tempArray = [];
+        for(let i = 0; i < 4; i++) {
+            for(let j = 0; j < 5; j++) {
+                tempArray.push(itemsData[i*5 + j]);
+            }
+            offersArray.push(tempArray);
+            tempArray = [];
+        }
+        console.log(offersArray);
+
+        const offersRender = offersArray.map((array) => {
+            const tempItems = array.map((item) => {
+                return (
+                    <div className='flex flex-col gap-2 min-w-[150px] max-h-[500px] mr-4'>
+                        <Link to={`/item/${item?._id}`}><img src={item?.image} alt="product" className='h-[200px] mb-4 cursor-pointer' /></Link>
+                        <div className='text-slate-800 text-left text-2xl font-bold'>{item?.price}zł</div>
+                        <div className='text-slate-600'>{item?.description}</div>
+                    </div>
+                )
+            })
+
+            return (
+                <div className='mt-10 min-h-[380px] bg-white w-[90vw] mx-auto relative top-[130px] overflow-scroll p-6 flex gap-20 overflow-y-hidden'>
+                    {tempItems}
+                </div>
+            )
+        })
+
         return (
-            <div className='min-h-[380px] bg-white w-[90vw] mx-auto relative top-[130px] overflow-scroll p-6 flex gap-20 overflow-y-hidden'>
-                <div className='flex flex-col gap-2 w-[150px] cursor-pointer'>
-                    <img src="./images/product.png" alt="product" className='w-60 mb-4' />
-                    <div className='text-slate-800 text-left text-2xl font-bold'>600.00 zł</div>
-                    <div className='text-slate-600'>Dmuchana deska 320cm SUP unosząca na wodzie</div>
-                </div>
-
-                <div className='flex flex-col gap-2 w-[150px] max-h-[500px]'>
-                    <img src="./images/product.png" alt="product" className='w-60 mb-4 cursor-pointer' />
-                    <div className='text-slate-800 text-left text-2xl font-bold'>600.00 zł</div>
-                    <div className='text-slate-600'>Dmuchana deska 320cm SUP unosząca na wodzie</div>
-                </div>
-
-                <div className='flex flex-col gap-2 w-[150px] max-h-[500px] cursor-pointer'>
-                    <img src="./images/product.png" alt="product" className='w-60 mb-4' />
-                    <div className='text-slate-800 text-left text-2xl font-bold'>600.00 zł</div>
-                    <div className='text-slate-600'>Dmuchana deska 320cm SUP unosząca na wodzie</div>
-                </div>
-
-                <div className='flex flex-col gap-2 w-[150px] max-h-[500px] cursor-pointer'>
-                    <img src="./images/product.png" alt="product" className='w-60 mb-4' />
-                    <div className='text-slate-800 text-left text-2xl font-bold'>600.00 zł</div>
-                    <div className='text-slate-600'>Dmuchana deska 320cm SUP unosząca na wodzie</div>
-                </div>
-
-                <div className='flex flex-col gap-2 w-[150px] max-h-[500px] cursor-pointer'>
-                    <img src="./images/product.png" alt="product" className='w-60 mb-4' />
-                    <div className='text-slate-800 text-left text-2xl font-bold'>600.00 zł</div>
-                    <div className='text-slate-600'>Dmuchana deska 320cm SUP unosząca na wodzie</div>
-                </div>
+            <div>
+                {offersRender}
             </div>
         )
     }
@@ -192,11 +218,7 @@ const Main = () => {
     <div className="w-screen h-screen overflow-y-scroll flex flex-col bg-slate-100">
         <Navbar />
 
-        <div className='flex flex-col gap-10 mb-8'>
-            <Offers />
-            <Offers />
-            <Offers />
-            <Offers />
+        <div className='flex flex-col gap-20 mb-8'>
             <Offers />
         </div>
 
