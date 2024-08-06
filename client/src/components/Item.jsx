@@ -31,6 +31,25 @@ const Item = () => {
         } catch (error) {
             console.error('Error:', error);
         }
+
+        try {
+            const response = await fetch(`http://localhost:5000/api/get-data`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const result = await response.json();
+            setUserLikedItems(result.data.liked);
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
     
@@ -38,6 +57,12 @@ const Item = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if(userLikedItems.includes(itemId)){
+            setClicked(true);
+        }
+    }, [userLikedItems, clicked]);
 
     const toggleLike = async () => {
         try {
@@ -124,6 +149,7 @@ const Item = () => {
                         <Link to="/cart"><FaShoppingCart size={40} className='text-slate-800 cursor-pointer' /></Link>
                     </div>
                 </div>
+
                 <div className='flex justify-between mx-32 gap-6 mb-24'>
                     <div className='w-[70%] bg-white p-8'>
                         <div className='flex justify-between'>

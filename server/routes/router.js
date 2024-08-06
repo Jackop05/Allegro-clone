@@ -265,8 +265,10 @@ router.delete('/remove-from-cart', async (req, res) => {
       if (!user) {
           return res.status(404).json({ message: 'User not found' });
       }
+      
 
       user.cart = user.cart.filter(item => item.itemId.toString() !== itemId);
+      console.log(user.cart)
       await user.save();
 
       res.json({ message: 'Item removed from cart', cart: user.cart });
@@ -274,6 +276,39 @@ router.delete('/remove-from-cart', async (req, res) => {
       res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
+
+router.put('/update-cart-item', async (req, res) => {
+  const token = req.cookies.jwt;
+   
+  if (!token) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
+
+  try {
+    
+      const { itemId, newQuantity } = req.body;
+      const decoded = jwt.verify(token, 'testing');
+      const userId = decoded.userId;
+
+      const user = await User.findById(userId);
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+      
+      let newCart = user.cart;
+      const index = newCart.findIndex(item => item.itemId === itemId);
+      newCart[index].numberOfItems = newQuantity;
+      user.cart = newCart;
+
+      await user.save();
+
+      res.json({ message: 'Item removed from cart', cart: user.cart });
+  } catch (error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 
 
 

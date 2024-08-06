@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FaHeart, FaShippingFast, FaShoppingCart, FaTrash, FaHome } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Cart = () => {
+    const navigate = useNavigate();
+
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -21,16 +23,12 @@ const Cart = () => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }
-            
 
             const result = await response.json();
             const items = result.data.cart; // Assuming `result.data.cart` is an array of cart items
 
             setCartItems(items);
-
-            // Calculate total price
-            const total = items.reduce((acc, item) => acc + item.price * item.numberOfItems, 0);
-            setTotalPrice(total);
+            calculateTotalPrice(items);
         } catch (error) {
             console.error('Error fetching user data:', error);
         } finally {
@@ -41,6 +39,11 @@ const Cart = () => {
     useEffect(() => {
         fetchUserData();
     }, []);
+
+    const calculateTotalPrice = (items) => {
+        const total = items.reduce((acc, item) => acc + item.price * item.numberOfItems, 0);
+        setTotalPrice(total);
+    };
 
     // Handle quantity update
     const updateQuantity = async (itemId, change) => {
@@ -69,15 +72,15 @@ const Cart = () => {
             }
 
             // Update local state
-            setCartItems(cartItems.map(item =>
+            const updatedItems = cartItems.map(item =>
                 item.itemId === itemId
                     ? { ...item, numberOfItems: newQuantity }
                     : item
-            ));
+            );
 
-            // Update total price
-            const total = cartItems.reduce((acc, item) => acc + (item.itemId === itemId ? newQuantity : item.numberOfItems) * item.price, 0);
-            setTotalPrice(total);
+            setCartItems(updatedItems);
+            calculateTotalPrice(updatedItems);
+
         } catch (error) {
             console.error('Error updating quantity:', error);
         }
@@ -104,10 +107,7 @@ const Cart = () => {
             // Remove item from local state
             const updatedItems = cartItems.filter(item => item.itemId !== itemId);
             setCartItems(updatedItems);
-
-            // Update total price
-            const total = updatedItems.reduce((acc, item) => acc + item.price * item.numberOfItems, 0);
-            setTotalPrice(total);
+            calculateTotalPrice(updatedItems);
         } catch (error) {
             console.error('Error removing item:', error);
         }
@@ -141,7 +141,6 @@ const Cart = () => {
     };
 
     const OfferCart = ({ item }) => {
-        console.log(item)
         return (
             <div className='flex flex-col gap-4'>
                 <div className='flex justify-between bg-white p-16'>
@@ -168,10 +167,9 @@ const Cart = () => {
                     </div>
                     <div className='flex self-center gap-4'>
                         <div className='text-slate-800 text-left text-2xl font-semibold'>{(item.price * item.numberOfItems).toFixed(2)} zł</div>
-                        <FaTrash
-                            className='text-slate-700 self-center text-2xl cursor-pointer'
-                            onClick={() => removeItem(item.itemId)}
-                        />
+                        <div onClick={() => removeItem(item.itemId)}>
+                            <FaTrash className='text-slate-700 self-center text-2xl cursor-pointer' />
+                        </div>
                     </div>
                 </div>
             </div>

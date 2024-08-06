@@ -122,14 +122,16 @@ const Liked = () => {
         return (
             <div className='flex flex-col gap-4'>
                 <div className='flex justify-between bg-white p-16'>
-                    <div className='flex gap-4 cursor-pointer'>
-                        <img src={item.image} alt="Product" className='h-[160px]' />
-                        <div className='flex flex-col gap-1'>
-                            <div className='text-slate-600 text-xl max-w-[300px]'>{item.description}</div>
-                            <div className='text-slate-800 text-left text-2xl font-semibold'>{item.price} zł</div>
-                            <div className='text-slate-500 mt-4'>{item.boughtNumber} osoba{item.boughtNumber > 1 ? 'i' : ''} kupiła</div>
+                    <Link to={`/item/${item._id}`}>
+                        <div className='flex gap-4 cursor-pointer'>
+                            <img src={item.image} alt="Product" className='h-[160px]' />
+                            <div className='flex flex-col gap-1'>
+                                <div className='text-slate-600 text-xl max-w-[300px]'>{item.description}</div>
+                                <div className='text-slate-800 text-left text-2xl font-semibold'>{item.price} zł</div>
+                                <div className='text-slate-500 mt-4'>{item.boughtNumber} osoba{item.boughtNumber > 1 ? 'i' : ''} kupiła</div>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                     <div className='flex flex-col justify-end'>
                         <div
                             className='bg-orange-600 text-white p-2 max-h-[40px] rounded-sm cursor-pointer'
