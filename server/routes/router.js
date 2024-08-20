@@ -5,6 +5,7 @@ const User = require('../models/User');
 const Item = require('../models/Item');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const CategoryMapping = require('../CategoryMapping');
 
 // Log user in
 // Register user
@@ -37,6 +38,8 @@ const cookieParser = require('cookie-parser');
 
 
 router.get('/get-data', async (req, res) => {
+  const category = (req.query.category == undefined || req.query.category == 'wszystkie_kategorie') ? null : req.query.category;
+  
   
   const token = req.cookies.jwt;
 
@@ -81,14 +84,94 @@ router.get('/get-item-data/:itemId', async (req, res) => {
 
 
 router.get('/get-random-items-data', async (req, res) => {
+  const category = req.query.category && req.query.category !== 'wszystkie_kategorie' ? req.query.category : null;
+
   try {
-    const randomItems = await Item.aggregate([{ $sample: { size: 100 } }]);
-    res.json(randomItems);
+    let items;
+    
+    if (category) {
+      // Get items by category
+      items = await Item.find({ category }).limit(100);
+    } else {
+      // Get random items
+      items = await Item.aggregate([{ $sample: { size: 100 } }]);
+    }
+
+    // If fewer than 100 items are found, fill up with random items
+    if (items.length < 100) {
+      const additionalItems = await Item.aggregate([{ $sample: { size: 100 - items.length } }]);
+      items = items.concat(additionalItems);
+    }
+
+    // Shuffle the items array to randomize the order
+    items = items.sort(() => 0.5 - Math.random());
+
+    res.json(items);
   } catch (error) {
-    console.error('Error retrieving random items:', error);
+    console.error('Error retrieving items:', error);
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+
+const getRandomItems = async (limit = 100) => {
+  return await Item.aggregate([{ $sample: { size: limit } }]);
+};
+
+// Utility function to get a minimum number of items
+const getItemsWithMinimumCount = async (searchPattern, minCount) => {
+  // Fetch items matching the search pattern
+  const matchingItems = await Item.find({
+    $or: [
+      { name: { $regex: searchPattern } },
+      { description: { $regex: searchPattern } }
+    ]
+  }).limit(minCount); // Ensure to fetch at least `minCount` items
+
+  // If fewer items are found than required, fetch random items
+  if (matchingItems.length < minCount) {
+    const randomItems = await getRandomItems(minCount - matchingItems.length);
+    return matchingItems.concat(randomItems); // Combine search results with random results
+  }
+
+  return matchingItems;
+};
+
+router.get('/get-specific-data/:parameter', async (req, res) => {
+  let category = req.query.category && req.query.category !== 'wszystkie_kategorie' ? CategoryMapping[req.query.category.toLowerCase()] : null;
+  const parameter = req.params.parameter;
+  
+
+  try {
+    if (typeof parameter !== 'string' || parameter.trim() === '') {
+      return res.status(400).json({ error: 'Invalid search text' });
+    }
+
+    const searchPattern = new RegExp(parameter, 'i');
+    let items;
+
+    if (category) {
+      items = await Item.find({ category, $or: [{ name: searchPattern }, { description: searchPattern }] }).limit(100);
+    } else {
+      items = await Item.find({ $or: [{ name: searchPattern }, { description: searchPattern }] }).limit(100);
+    }
+
+    if (items.length < 100) {
+      const additionalItems = await Item.aggregate([{ $sample: { size: 100 - items.length } }]);
+      items = items.concat(additionalItems);
+    }
+
+
+   
+
+    res.json(items);
+  } catch (error) {
+    console.error('Error retrieving specific items:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 
 
@@ -306,6 +389,57 @@ router.put('/update-cart-item', async (req, res) => {
       res.json({ message: 'Item removed from cart', cart: user.cart });
   } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+router.post('/bought-items', async (req, res) => {
+  const token = req.cookies.jwt;
+  if (!token) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
+  
+  try {
+      // Step 1: Find the user by email (assuming email is part of userData)
+      const decoded = jwt.verify(token, 'testing');
+      const userId = decoded.userId;
+
+      const user = await User.findById(userId);
+      if (!user) {
+          return res.status(404).json({ message: 'User not found.' });
+      }
+
+      // Get the cart items from the user data
+      const cartItems = user.cart || [];
+      
+
+      // Step 2: Update the items in the inventory and clear the user's cart
+      for (const cartItem of cartItems) {
+          const item = await Item.findById(cartItem.itemId);
+          if (!item) {
+              continue; // Skip if the item does not exist
+          }
+          
+
+          // Step 3: Update the item's quantity and boughtNumber
+          if (item.quantityAvailable >= cartItem.numberOfItems) {
+              item.quantityAvailable -= cartItem.numberOfItems;
+              item.boughtNumber += cartItem.numberOfItems;
+
+              await item.save();
+          } else {
+              return res.status(400).json({ message: `Not enough quantity for item: ${item.name}` });
+          }
+      }
+
+      // Step 4: Clear the user's cart
+      user.cart = []; // Clear the cart
+      await user.save(); // Save the updated user document
+
+      // Step 5: Send a response back to the client
+      res.status(200).json({ message: 'Items purchased successfully!' });
+  } catch (error) {
+      console.error('Error processing purchase:', error);
+      res.status(500).json({ message: 'Internal server error.' });
   }
 });
 

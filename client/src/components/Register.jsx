@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
 
-    const data = {
-      email: email,
-      password: password,
-    };
+    const data = { email, password };
 
     try {
       const response = await fetch('http://localhost:5000/api/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify(data),
       });
@@ -25,6 +23,7 @@ const Login = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
       }
+      navigate('/login');
 
       const result = await response.json();
       console.log('Success:', result);
@@ -34,7 +33,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white py-12 px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <img className="mx-auto h-12 w-auto" src="./images/allegroLogo.png" alt="Logo" />
@@ -79,15 +78,17 @@ const Login = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-500 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+              className="mb-6 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-500 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
             >
               Register
             </button>
           </div>
 
-          <div className='text-lg text-orange-500 font-bold text-center cursor-pointer'>
-            If you already have an Account, you can sign in here
-          </div>
+          <Link to="/login">
+            <div className='text-lg text-orange-500 font-bold text-center cursor-pointer'>
+              If you already have an account, you can sign in here
+            </div>
+          </Link>
         </form>
       </div>
     </div>

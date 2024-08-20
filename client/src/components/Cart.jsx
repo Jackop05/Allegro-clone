@@ -113,26 +113,43 @@ const Cart = () => {
         }
     };
 
+    const boughtItems = async () => {
+        const userConfirmed = confirm("Are you sure you want to buy these items?");
+        if (!userConfirmed) {
+            alert("Purchase canceled.");
+            navigate('/');
+            navigate('/cart');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/api/bought-items', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+  
+            navigate('/')
+        } catch (error) {
+            console.error('Error removing item:', error);
+        }
+    }
+
+
+
     const Navbar = () => {
         return (
             <div className='w-screen bg-white flex justify-between px-10 py-6 fixed z-50'>
                 <img src='./images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer' />
-                <div className='flex gap-4'>
-                    <form className='max-w-[800px] self-center flex'>
-                        <input type='text' className='p-2 w-[25vw] border-[1px] border-slate-800 border-solid border-r-0' placeholder="czego szukasz?" />
-                        <button className='text-white bg-orange-500 text-xl p-2 pl-[4px] self-center rounded-sm tracking-wider'>Szukaj</button>
-                    </form>
-                    <form className='self-center border-solid border-[1px] border-slate-800 p-2'>
-                        <label htmlFor="categories"></label>
-                        <select id="categories" name="categories" className='outline-none'>
-                            <option value="wszystkie_kategorie">Wszystkie kategorie</option>
-                            {/* More options */}
-                        </select>
-                    </form>
-                </div>
+                
                 <div className='flex gap-4'>
                     <Link to="/"><FaHome size={40} className='text-slate-800 cursor-pointer' /></Link>
-                    <Link to="/my-deliveries"><FaShippingFast size={40} className='text-slate-800 cursor-pointer' /></Link>
                     <Link to="/liked"><FaHeart size={40} className='text-slate-800 cursor-pointer' /></Link>
                     <Link to="/cart"><FaShoppingCart size={40} className='text-slate-800 cursor-pointer' /></Link>
                 </div>
@@ -200,7 +217,7 @@ const Cart = () => {
                             <div className=''>Razem z dostawą</div>
                             <div className=''>{(totalPrice + 10).toFixed(2)} zł</div> {/* Assuming 10 zł is the delivery cost */}
                         </div>
-                        <div className='bg-orange-500 text-white p-2 max-h-[40px] rounded-sm cursor-pointer text-center'>Płatność</div>
+                        <div className='bg-orange-500 text-white p-2 max-h-[40px] rounded-sm cursor-pointer text-center' onClick={boughtItems}>Płatność</div>
                     </div>
                 </div>
             </div>

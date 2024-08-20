@@ -95,22 +95,9 @@ const Liked = () => {
         return (
             <div className='w-screen bg-white flex justify-between px-10 py-6 fixed z-50'>
                 <img src='./images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer' />
-                <div className='flex gap-4'>
-                    <form className='max-w-[800px] self-center flex'>
-                        <input type='text' className='p-2 w-[25vw] border-[1px] border-slate-800 border-solid border-r-0' placeholder="czego szukasz?" />
-                        <button className='text-white bg-orange-500 text-xl p-2 pl-[4px] self-center rounded-sm tracking-wider'>Szukaj</button>
-                    </form>
-                    <form className='self-center border-solid border-[1px] border-slate-800 p-2'>
-                        <label htmlFor="categories"></label>
-                        <select id="categories" name="categories" className='outline-none'>
-                            <option value="wszystkie_kategorie">Wszystkie kategorie</option>
-                            {/* More options */}
-                        </select>
-                    </form>
-                </div>
+                
                 <div className='flex gap-4'>
                     <Link to="/"><FaHome size={40} className='text-slate-800 cursor-pointer' /></Link>
-                    <Link to="/my-deliveries"><FaShippingFast size={40} className='text-slate-800 cursor-pointer' /></Link>
                     <Link to="/liked"><FaHeart size={40} className='text-slate-800 cursor-pointer' /></Link>
                     <Link to="/cart"><FaShoppingCart size={40} className='text-slate-800 cursor-pointer' /></Link>
                 </div>
@@ -119,6 +106,7 @@ const Liked = () => {
     };
 
     const LikedOffer = ({ item }) => {
+        console.log(item);
         return (
             <div className='flex flex-col gap-4'>
                 <div className='flex justify-between bg-white p-16'>
@@ -156,7 +144,7 @@ const Liked = () => {
                 <div className='text-black text-2xl font-bold mb-6'>Ulubione <span className='text-lg self-center font-normal relative bottom-1'>({likedItems.length})</span></div>
                 <div className='flex flex-col gap-10'>
                     {likedItems.map(item => (
-                        <LikedOffer key={item.itemId} item={item} />
+                        <LikedOffer item={item} />
                     ))}
                 </div>
             </div>
