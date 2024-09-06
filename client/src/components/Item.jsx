@@ -138,13 +138,11 @@ const Item = () => {
                             <label htmlFor="categories"></label>
                             <select id="categories" name="categories" className='outline-none' >
                                 <option value="wszystkie_kategorie">Wszystkie kategorie</option>
-                                {/* More options */}
                             </select>
                         </form>
                     </div>
                     <div className='flex gap-4'>
                         <Link to="/"><FaHome size={40} className='text-slate-800 cursor-pointer' /></Link>
-                        <Link to="/my-deliveries"><FaShippingFast size={40} className='text-slate-800 cursor-pointer' /></Link>
                         <Link to="/liked"><FaHeart size={40} className='text-slate-800 cursor-pointer' /></Link>
                         <Link to="/cart"><FaShoppingCart size={40} className='text-slate-800 cursor-pointer' /></Link>
                     </div>

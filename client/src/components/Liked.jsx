@@ -116,7 +116,7 @@ const Liked = () => {
                             <div className='flex flex-col gap-1'>
                                 <div className='text-slate-600 text-xl max-w-[300px]'>{item.description}</div>
                                 <div className='text-slate-800 text-left text-2xl font-semibold'>{item.price} zł</div>
-                                <div className='text-slate-500 mt-4'>{item.boughtNumber} osoba{item.boughtNumber > 1 ? 'i' : ''} kupiła</div>
+                                <div className='text-slate-500 mt-4'>{item.boughtNumber} osoba kupiła</div>
                             </div>
                         </div>
                     </Link>
