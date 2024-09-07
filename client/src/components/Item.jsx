@@ -124,44 +124,47 @@ const Item = () => {
         }
     };
 
+    const Navbar = () => {
+        return (
+            <div className='w-screen bg-white flex justify-between px-10 py-6 fixed z-50'>
+                <img src='./images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer  hidden md:inline' />
+                
+                <div className='flex justify-around md:justify-end gap-4 w-full'>
+                    <Link to="/"><FaHome size={40} className='text-slate-800 cursor-pointer' /></Link>
+                    <Link to="/liked"><FaHeart size={40} className='text-slate-800 cursor-pointer' /></Link>
+                    <Link to="/cart"><FaShoppingCart size={40} className='text-slate-800 cursor-pointer' /></Link>
+                </div>
+            </div>
+        );
+    };
+
+    
+
     return (
         <div className="w-screen h-screen overflow-y-scroll flex flex-col bg-slate-100">
             <div className='relative top-[130px]'>
-                <div className='w-screen bg-white flex justify-between px-10 py-6 fixed top-0 z-50 '>
-                    <img src='../images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer' />
-                    <div className='flex gap-4'>
-                        <form className='max-w-[800px] self-center flex'>
-                            <input type='text' className='p-2  w-[25vw] border-[1px] border-slate-800 border-solid border-r-0' placeholder="czego szukasz?" />
-                            <button className='text-white bg-orange-500 text-xl p-2 pl-[4px] self-center rounded-sm tracking-wider'>Szukaj</button>
-                        </form>
-                        <form className='self-center border-solid border-[1px] border-slate-800 p-2'>
-                            <label htmlFor="categories"></label>
-                            <select id="categories" name="categories" className='outline-none' >
-                                <option value="wszystkie_kategorie">Wszystkie kategorie</option>
-                            </select>
-                        </form>
-                    </div>
-                    <div className='flex gap-4'>
+                <div className='w-screen bg-white flex justify-between px-10 py-6 fixed top-0 z-50'>
+                    <img src='../images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer hidden sm:inline' />
+                    <div className='flex justify-around sm:justify-end gap-4 w-full'>
                         <Link to="/"><FaHome size={40} className='text-slate-800 cursor-pointer' /></Link>
                         <Link to="/liked"><FaHeart size={40} className='text-slate-800 cursor-pointer' /></Link>
                         <Link to="/cart"><FaShoppingCart size={40} className='text-slate-800 cursor-pointer' /></Link>
                     </div>
                 </div>
 
-                <div className='flex justify-between mx-32 gap-6 mb-24'>
-                    <div className='w-[70%] bg-white p-8'>
-                        <div className='flex justify-between'>
+                <div className='flex flex-col justify-between mx-8 lg:mx-16 gap-6 mb-24'>
+                    <div className='max-w-[700px] bg-white p-8'>
+                        <div className='flex justify-between gap-2'>
                             <div className='text-xl font-bold'>{itemData?.description}</div>
                             <FaHeart
-                                size={40}
-                                className={`cursor-pointer ${(clicked) ? 'text-red-500' : 'text-slate-300'}`}
+                                className={`cursor-pointer ${(clicked) ? 'text-red-500' : 'text-slate-300'} text-[50px]`}
                                 onClick={toggleLike}
                             />
                         </div>
                         <div className='text-md text-slate-700'>4,5/5</div>
                         <img src={itemData?.image} alt="Product" className='w-[60%] mx-auto mt-8' />
                     </div>
-                    <div className='bg-white text-slate-800 flex flex-col gap-2 p-4 w-[25%] fixed right-32'>
+                    <div className='bg-white text-slate-800 flex flex-col gap-2 p-4 max-w-[300px] right-32'>
                         <div className='pb-4 border-b-[2px] border-slate-200'>
                             <div className='font-bold text-3xl'>{itemData?.price}zł</div>
                             <div className='text-md text-slate-500'>{itemData?.boughtNumber} osób kupiło</div>

@@ -161,10 +161,10 @@ const Cart = () => {
         console.log(item)
         return (
             <div className='flex-col gap-4'>
-                <div className='flex-col lg:flex justify-between bg-white p-16'>
-                    <div className='flex-col lg:flex'>
-                        <img src={item?.image} alt="Product" className='h-[100px] cursor-pointer mx-auto mb-4' />
-                        <div className='flex border-[1px] border-slate-800 h-[40px] items-center self-center lg:mx-16'>
+                <div className='flex flex-col lg:flex-row justify-between bg-white p-16'>
+                    <div className='gap-4 flex flex-col lg:flex-row'>
+                        <Link to={`/item/${item.itemId}`} ><img src={item?.image} alt="Product" className='h-[100px] cursor-pointer mx-auto mb-4' /></Link>
+                        <div className='flex border-[1px] border-slate-800 h-[40px] items-center self-center md:mx-8'>
                             <div
                                 className='text-slate-800 py-2 px-4 border-r-[1px] border-slate-800 cursor-pointer'
                                 onClick={() => updateQuantity(item.itemId, -1)}
@@ -180,7 +180,7 @@ const Cart = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='flex self-center gap-4'>
+                    <div className='flex self-center gap-4 mt-8 lg:mt-0'>
                         <div className='text-slate-800 text-left text-2xl font-semibold'>{(item.price * item.numberOfItems).toFixed(2)} zł</div>
                         <div onClick={() => removeItem(item.itemId)}>
                             <FaTrash className='text-slate-700 self-center text-2xl cursor-pointer' />
