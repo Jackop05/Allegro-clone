@@ -27,13 +27,15 @@ The **Allegro Clone** is a full-stack web application that replicates key functi
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/allegro-clone.git
-   cd allegro-clone
-2. Install the necessary dependencies:
+   git clone https://github.com/Jackop05/allegro_clone.git
+   cd Messenger_clone
+2. Start the client:
     ```bash
-    npm install
-3. Start the application:
+    cd client
+    npm run dev
+3. Start the server in diffrent place:
     ```bash
+    cd server
     npm start
 The app will run on http://localhost:5000.
 
