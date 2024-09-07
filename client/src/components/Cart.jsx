@@ -146,9 +146,9 @@ const Cart = () => {
     const Navbar = () => {
         return (
             <div className='w-screen bg-white flex justify-between px-10 py-6 fixed z-50'>
-                <img src='./images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer' />
+                <img src='./images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer  hidden md:inline' />
                 
-                <div className='flex gap-4'>
+                <div className='flex justify-around md:justify-end gap-4 w-full'>
                     <Link to="/"><FaHome size={40} className='text-slate-800 cursor-pointer' /></Link>
                     <Link to="/liked"><FaHeart size={40} className='text-slate-800 cursor-pointer' /></Link>
                     <Link to="/cart"><FaShoppingCart size={40} className='text-slate-800 cursor-pointer' /></Link>
@@ -158,28 +158,26 @@ const Cart = () => {
     };
 
     const OfferCart = ({ item }) => {
+        console.log(item)
         return (
-            <div className='flex flex-col gap-4'>
-                <div className='flex justify-between bg-white p-16'>
-                    <div className='flex gap-4 cursor-pointer'>
-                        <img src={item?.image} alt="Product" className='h-[100px]' />
-                        <div className='flex flex-col justify-center'>
-                            <div className='text-slate-600 text-lg max-w-[200px] ml-4'>{item.description}</div>
-                        </div>
-                    </div>
-                    <div className='flex border-[1px] border-slate-800 h-[40px] items-center self-center mx-16'>
-                        <div
-                            className='text-slate-800 py-2 px-4 border-r-[1px] border-slate-800 cursor-pointer'
-                            onClick={() => updateQuantity(item.itemId, -1)}
-                        >
-                            -
-                        </div>
-                        <div className='text-slate-800 py-2 px-8'>{item.numberOfItems}</div>
-                        <div
-                            className='text-slate-800 py-2 px-4 border-l-[1px] border-slate-800 cursor-pointer'
-                            onClick={() => updateQuantity(item.itemId, 1)}
-                        >
-                            +
+            <div className='flex-col gap-4'>
+                <div className='flex-col lg:flex justify-between bg-white p-16'>
+                    <div className='flex-col lg:flex'>
+                        <img src={item?.image} alt="Product" className='h-[100px] cursor-pointer mx-auto mb-4' />
+                        <div className='flex border-[1px] border-slate-800 h-[40px] items-center self-center lg:mx-16'>
+                            <div
+                                className='text-slate-800 py-2 px-4 border-r-[1px] border-slate-800 cursor-pointer'
+                                onClick={() => updateQuantity(item.itemId, -1)}
+                            >
+                                -
+                            </div>
+                            <div className='text-slate-800 py-2 px-8'>{item.numberOfItems}</div>
+                            <div
+                                className='text-slate-800 py-2 px-4 border-l-[1px] border-slate-800 cursor-pointer'
+                                onClick={() => updateQuantity(item.itemId, 1)}
+                            >
+                                +
+                            </div>
                         </div>
                     </div>
                     <div className='flex self-center gap-4'>
@@ -200,15 +198,16 @@ const Cart = () => {
     return (
         <div className="w-screen h-screen overflow-y-scroll flex flex-col bg-slate-100">
             <Navbar />
-            <div className='relative top-[100px] py-20 px-32'>
+            <div className='relative top-[130px] py-4 px-8 md:py-20 md:px-20'>
                 <div className='text-black text-2xl font-bold mb-6'>Koszyk <span className='text-lg self-center font-normal relative bottom-1'>({cartItems.length})</span></div>
-                <div className='flex gap-20'>
-                    <div className='flex flex-col gap-10'>
+                <div className='flex-col lg:flex gap-20'>
+                    <div className='flex flex-col gap-10 mb-8 lg:mb-0 max-w-[800px]'>
                         {cartItems.map(item => (
                             <OfferCart key={item.itemId} item={item} />
                         ))}
                     </div>
-                    <div className='bg-white text-slate-800 flex flex-col gap-2 p-4 w-[320px] max-h-[180px] fixed right-32'>
+
+                    <div className='bg-white text-slate-800 flex flex-col gap-2 p-4 w-[320px] max-h-[180px] right-20'>
                         <div className='flex justify-between pb-4 border-b-[2px] border-slate-200'>
                             <div className=''>Wartość produktów</div>
                             <div className=''>{totalPrice.toFixed(2)} zł</div>

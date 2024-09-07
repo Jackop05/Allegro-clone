@@ -128,9 +128,6 @@ const Main = () => {
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" className="h-10" />
                                 </a>
                             </div>
-                            <div className="flex space-x-4">
-                                {/* Ikony mediów społecznościowych */}
-                            </div>
                         </div>
                         <img src="./images/allegroWhiteLogo.png" alt="Allegro logo" className='h-[40px] w-auto cursor-pointer' />
                     </div>
@@ -148,14 +145,14 @@ const Main = () => {
 
     return (
         <div className="w-screen h-screen overflow-y-scroll flex flex-col bg-slate-100">
-            <div className='w-screen bg-white flex justify-between px-10 py-6 fixed  z-50'>
-                <img src='./images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer' />
-                <div className='flex gap-4'>
-                    <div className='max-w-[800px] self-center flex'>
-                        <input type='text' className='p-2 w-[25vw] border-[1px] border-slate-800 border-solid border-r-0' placeholder="czego szukasz?" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+            <div className='w-screen bg-white flex-row lg:flex justify-between px-10 py-6 m-4 lg:m-0 fixed z-50'>
+                <img src='./images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer hidden lg:inline' />
+                <div className='flex-row lg:flex gap-4'>
+                    <div className='max-w-[800px] self-center flex mb-4 lg:mb-0'>
+                        <input type='text' className='p-2 min-w-[25vw] w-full border-[1px] border-slate-800 border-solid border-r-0' placeholder="czego szukasz?" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
                         <button className='text-white bg-orange-500 text-xl p-2 pl-[4px] self-center rounded-sm tracking-wider' onClick={searchClick} >Szukaj</button>
                     </div>
-                    <form className='self-center border-solid border-[1px] border-slate-800 p-2'>
+                    <form className='self-center border-solid border-[1px] border-slate-800 p-2  hidden lg:inline'>
                         <label htmlFor="categories"></label>
                         <select id="categories" name="categories" className='outline-none' value={selectedCategory} onChange={(e) => {setSelectedCategory(e.target.value); fetchData()}}>
                             <option value="wszystkie_kategorie">Wszystkie kategorie</option>
@@ -183,7 +180,7 @@ const Main = () => {
                         </select>
                     </form>
                 </div>
-                <div className='flex gap-4'>
+                <div className='flex gap-4 justify-around lg:justify-end'>
                     <Link to="/"><FaHome size={40} className='text-slate-800 cursor-pointer' /></Link>
                     <Link to="/liked"><FaHeart size={40} className='text-slate-800 cursor-pointer' /></Link>
                     <Link to="/cart"><FaShoppingCart size={40} className='text-slate-800 cursor-pointer' /></Link>

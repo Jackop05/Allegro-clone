@@ -94,9 +94,9 @@ const Liked = () => {
     const Navbar = () => {
         return (
             <div className='w-screen bg-white flex justify-between px-10 py-6 fixed z-50'>
-                <img src='./images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer' />
+                <img src='./images/allegroLogo.png' alt="logo" className='w-[150px] h-auto cursor-pointer  hidden md:inline' />
                 
-                <div className='flex gap-4'>
+                <div className='flex justify-around md:justify-end gap-4 w-full'>
                     <Link to="/"><FaHome size={40} className='text-slate-800 cursor-pointer' /></Link>
                     <Link to="/liked"><FaHeart size={40} className='text-slate-800 cursor-pointer' /></Link>
                     <Link to="/cart"><FaShoppingCart size={40} className='text-slate-800 cursor-pointer' /></Link>
@@ -109,9 +109,9 @@ const Liked = () => {
         console.log(item);
         return (
             <div className='flex flex-col gap-4'>
-                <div className='flex justify-between bg-white p-16'>
+                <div className='flex-row lg:flex justify-between bg-white p-8'>
                     <Link to={`/item/${item._id}`}>
-                        <div className='flex gap-4 cursor-pointer'>
+                        <div className='flex-row md:flex gap-4 cursor-pointer mb-4 lg:mb-0'>
                             <img src={item.image} alt="Product" className='h-[160px]' />
                             <div className='flex flex-col gap-1'>
                                 <div className='text-slate-600 text-xl max-w-[300px]'>{item.description}</div>
@@ -122,7 +122,7 @@ const Liked = () => {
                     </Link>
                     <div className='flex flex-col justify-end'>
                         <div
-                            className='bg-orange-600 text-white p-2 max-h-[40px] rounded-sm cursor-pointer'
+                            className='bg-orange-600 text-white p-2 max-h-[40px] w-[160px] text-center rounded-sm cursor-pointer'
                             onClick={() => addToCart(item)}
                         >
                             Dodaj do koszyka
@@ -140,7 +140,7 @@ const Liked = () => {
     return (
         <div className="w-screen h-screen overflow-y-scroll flex flex-col bg-slate-100">
             <Navbar />
-            <div className='relative top-[130px] py-20 px-32'>
+            <div className='relative top-[130px] py-4 px-8 md:py-20 md:px-32'>
                 <div className='text-black text-2xl font-bold mb-6'>Ulubione <span className='text-lg self-center font-normal relative bottom-1'>({likedItems.length})</span></div>
                 <div className='flex flex-col gap-10'>
                     {likedItems.map(item => (
