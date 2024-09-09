@@ -2,7 +2,9 @@
 
 ## 📝 Project Overview
 The **Allegro Clone** is a full-stack web application that replicates key functionalities of the popular e-commerce platform Allegro. It allows users to browse, search, and purchase items, featuring an intuitive interface, user authentication, and product management capabilities. Built with Node.js, Express, React, and styled with Tailwind CSS, this project showcases a comprehensive implementation of an online marketplace, making it an ideal addition to a developer's portfolio.
-C:\Users\jakub\Desktop\Portfolio-website\public\images\allegro-app-preview.png
+
+![image](https://github.com/user-attachments/assets/f0ad5ec5-a526-4c5a-ab3b-068914af937a)
+
 ## 💡 Features
 - **User Authentication & Authorization:**  
   Secure user authentication using **bcrypt** for password hashing, with login and registration functionalities. Role-based access for regular users and administrators.
